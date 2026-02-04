@@ -1,5 +1,7 @@
 # 10dos.com — Plugin website
 
+**Official site:** [https://10dos.com](https://10dos.com) · [Extension (GitHub)](https://github.com/zhangzhibin/10dos) · [This site (GitHub)](https://github.com/zhangzhibin/10dos.com)
+
 English landing page for the 10dos minimal todo browser extension. Built with Astro, static output for Cloudflare Pages. Content is managed in Markdown under `src/content/en/` for easy edits and future i18n (e.g. `src/content/zh/`).
 
 SEO: canonical, Open Graph, Twitter Card, JSON-LD (SoftwareApplication), `public/robots.txt`, and static `public/sitemap-index.xml` + `public/sitemap-0.xml`. Replace `public/og-image.svg` with a 1200×630 PNG for production if needed.
