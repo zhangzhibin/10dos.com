@@ -19,6 +19,10 @@ Yes. Once the extension is installed, your todo list works offline. All data sta
 
 10dos is available as a Chrome extension (Chrome Web Store). Support for other browsers may be added later.
 
+## Is 10dos open source?
+
+Yes. The extension and this website are both open source on GitHub: [Extension](https://github.com/zhangzhibin/10dos), [Site](https://github.com/zhangzhibin/10dos.com). You can view the code, report issues, or contribute.
+
 ## Can I have more than 10 tasks?
 
 The design is intentionally limited to 10 slots. The idea is to keep a small, focused list and complete it, then refresh. If you need more items, you can replace completed tasks with new ones.

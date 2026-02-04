@@ -35,6 +35,8 @@ Unlike endless todo apps, 10dos forces you to choose—so you actually finish.
 
 Your data stays on your device. No uploads, no tracking. [Privacy policy](/privacy/).
 
+**Open source** — The extension and this site are on [GitHub](https://github.com/zhangzhibin/10dos); you can review the code and see exactly what runs in your browser.
+
 New to 10dos? [How it works](/how-it-works/) · [FAQ](/faq/).
 
 Install the extension and keep only the 10 tasks that count.
