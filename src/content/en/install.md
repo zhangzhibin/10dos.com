@@ -5,6 +5,8 @@ description: Install the 10dos minimal todo extension from the Chrome Web Store.
 
 Install the 10dos extension and keep only the 10 tasks that count.
 
+![10dos popup](/screenshots/10dos-1.png)
+
 1. Open the Chrome Web Store link below.
 2. Click **Add to Chrome** (or **Install**).
 3. Confirm when prompted.
