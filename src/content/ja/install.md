@@ -5,7 +5,7 @@ description: Chrome ウェブストアから10dosミニマルTodo拡張機能を
 
 10dos拡張機能をインストールして、大事な10個だけをリストに残しましょう。
 
-![10dos ポップアップ](/screenshots/10dos-1.png)
+![Chrome ウェブストアの10dos](/screenshots/10dos-extension-2.webp)
 
 1. 下のChrome ウェブストアのリンクを開く。
 2. **Chromeに追加**（または**インストール**）をクリック。

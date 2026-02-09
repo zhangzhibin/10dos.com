@@ -73,6 +73,14 @@ const jsonLd = showJsonLd
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9H453K4YKW"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-9H453K4YKW');
+    </script>
   </head>
   <body>
     <Header currentPath={Astro.url.pathname} lang={lang} />
