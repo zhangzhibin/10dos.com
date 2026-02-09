@@ -10,7 +10,7 @@ interface Props {
   ogImage?: string;
   noindex?: boolean;
   showJsonLd?: boolean;
-  lang?: 'en' | 'ja';
+  lang?: 'en' | 'ja' | 'zh' | 'zhtw';
 }
 const {
   title,
@@ -22,7 +22,9 @@ const {
   lang: langProp,
 } = Astro.props;
 
-const lang = langProp ?? (Astro.url.pathname.startsWith('/ja') ? 'ja' : 'en');
+const pathname = Astro.url.pathname;
+const lang = langProp ?? (pathname.startsWith('/ja') ? 'ja' : pathname.startsWith('/zh-tw') ? 'zhtw' : pathname.startsWith('/zh') ? 'zh' : 'en');
+const htmlLang = lang === 'zh' ? 'zh-Hans' : lang === 'zhtw' ? 'zh-Hant' : lang;
 
 const site = Astro.site?.href ?? 'https://10dos.com';
 const canonicalUrl = new URL(canonicalPath || '/', site).href;
@@ -45,7 +47,7 @@ const jsonLd = showJsonLd
   : null;
 ---
 <!doctype html>
-<html lang={lang}>
+<html lang={htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

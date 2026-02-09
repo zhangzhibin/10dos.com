@@ -2,26 +2,44 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
+const CTA_LABEL: Record<string, string> = {
+  ja: 'Chrome ウェブストアで入手',
+  zh: '前往 Chrome 网上应用店',
+  zhtw: '前往 Chrome 線上應用程式商店',
+};
+
 export async function getStaticPaths() {
-  const entries = await getCollection('ja');
-  return entries.map((e) => ({
-    params: {
-      lang: 'ja',
-      slug: e.slug === 'index' ? undefined : e.slug,
-    },
-    props: { lang: 'ja' as const, slug: e.slug },
-  }));
+  const paths: { params: { lang: string; slug?: string }; props: { contentLang: 'ja' | 'zh' | 'zhtw'; slug: string } }[] = [];
+  const langConfig: { contentLang: 'ja' | 'zh' | 'zhtw'; urlLang: string }[] = [
+    { contentLang: 'ja', urlLang: 'ja' },
+    { contentLang: 'zh', urlLang: 'zh' },
+    { contentLang: 'zhtw', urlLang: 'zh-tw' },
+  ];
+  for (const { contentLang, urlLang } of langConfig) {
+    const entries = await getCollection(contentLang);
+    for (const e of entries) {
+      paths.push({
+        params: {
+          lang: urlLang,
+          slug: e.slug === 'index' ? undefined : e.slug,
+        },
+        props: { contentLang, slug: e.slug },
+      });
+    }
+  }
+  return paths;
 }
 
-const { lang, slug } = Astro.props;
-const entry = await getEntry('ja', slug);
-if (!entry) return Astro.redirect('/ja/');
+const { contentLang, slug } = Astro.props;
+const entry = await getEntry(contentLang, slug);
+const pathPrefix = Astro.params.lang === 'ja' ? '/ja' : Astro.params.lang === 'zh' ? '/zh' : '/zh-tw';
+if (!entry) return Astro.redirect(`${pathPrefix}/`);
 
 const { Content } = await render(entry);
 const { title, description, tagline, ogImage } = entry.data;
 const isIndex = slug === 'index';
 const isInstall = slug === 'install';
-const canonicalPath = isIndex ? '/ja/' : `/ja/${slug}/`;
+const canonicalPath = isIndex ? `${pathPrefix}/` : `${pathPrefix}/${slug}/`;
 ---
 <Layout
   title={title}
@@ -29,7 +47,7 @@ const canonicalPath = isIndex ? '/ja/' : `/ja/${slug}/`;
   canonicalPath={canonicalPath}
   ogImage={ogImage}
   showJsonLd={isInstall}
-  lang="ja"
+  lang={contentLang}
 >
   <main>
     {isIndex && tagline && (
@@ -49,7 +67,7 @@ const canonicalPath = isIndex ? '/ja/' : `/ja/${slug}/`;
           rel="noopener noreferrer"
           class="button"
         >
-          Chrome ウェブストアで入手
+          {CTA_LABEL[contentLang]}
         </a>
       </section>
     )}

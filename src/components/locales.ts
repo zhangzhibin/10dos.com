@@ -6,6 +6,8 @@
  */
 export const locales = [
   { code: 'en' as const, label: 'EN', pathPrefix: '' },
+  { code: 'zh' as const, label: '简体', pathPrefix: '/zh' },
+  { code: 'zhtw' as const, label: '繁體', pathPrefix: '/zh-tw' },
   { code: 'ja' as const, label: '日本語', pathPrefix: '/ja' },
 ] as const;
 
