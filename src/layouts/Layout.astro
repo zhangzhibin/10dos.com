@@ -28,6 +28,8 @@ const site = Astro.site?.href ?? 'https://10dos.com';
 const canonicalUrl = new URL(canonicalPath || '/', site).href;
 const ogImageUrl = ogImage ? new URL(ogImage, site).href : new URL('/og-image.svg', site).href;
 
+const adsensePub = import.meta.env.PUBLIC_ADSENSE_PUB_ID as string | undefined;
+
 const jsonLd = showJsonLd
   ? {
       '@context': 'https://schema.org',
@@ -72,6 +74,14 @@ const jsonLd = showJsonLd
     <meta name="twitter:image" content={ogImageUrl} />
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
+    <!-- Google AdSense (仅当设置 PUBLIC_ADSENSE_PUB_ID 时加载，勿将真实 ID 提交到仓库) -->
+    {adsensePub && (
+      <script
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${adsensePub}`}
+        crossorigin="anonymous"
+      />
     )}
     <!-- Google Analytics (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9H453K4YKW"></script>

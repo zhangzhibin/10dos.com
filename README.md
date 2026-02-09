@@ -43,3 +43,7 @@ npx wrangler pages deploy dist --project-name=10dos
 ```
 
 Ensure `wrangler.toml` has `pages_build_output_dir = "dist"` (already set).
+
+## Optional: AdSense
+
+To enable Google AdSense, set the build env var `PUBLIC_ADSENSE_PUB_ID` to your publisher ID (e.g. `pub-xxxxxxxxxx`). In Cloudflare Pages: Project → Settings → Environment variables. Do not commit the real ID to the repo; use `.env` locally (see `.env.example`) and env vars in CI/production. The `/ads.txt` file is generated at build time from this variable.
