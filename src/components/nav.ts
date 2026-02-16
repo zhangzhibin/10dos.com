@@ -7,6 +7,7 @@ export const navLinks = [
   { href: '/faq/', labelEn: 'FAQ', labelZh: '常见问题', labelZhtw: '常見問題', labelJa: 'よくある質問' },
   { href: '/install/', labelEn: 'Install', labelZh: '安装', labelZhtw: '安裝', labelJa: 'インストール' },
   { href: '/privacy/', labelEn: 'Privacy', labelZh: '隐私', labelZhtw: '隱私', labelJa: 'プライバシー' },
+  { href: '/magic-calculator/', labelEn: 'Magic Calculator', labelZh: '魔术计算器', labelZhtw: '魔術計算器', labelJa: 'マジック計算機' },
 ] as const;
 
 export type { Locale };

@@ -1,0 +1,330 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { magicCalculatorI18n } from '../data/magic-calculator-i18n';
+
+const t = magicCalculatorI18n.en;
+---
+
+<Layout
+  title={t.title}
+  description={t.description}
+  canonicalPath="/magic-calculator"
+  lang="en"
+>
+  <main class="calculator-page">
+    <h1 class="calculator-title">{t.title}</h1>
+    <div class="panel">
+      <div class="display" id="display">????</div>
+      <div class="row">
+        <button type="button" class="btn" data-digit="1">1</button>
+        <button type="button" class="btn" data-digit="2">2</button>
+        <button type="button" class="btn" data-digit="3">3</button>
+      </div>
+      <div class="row">
+        <button type="button" class="btn" data-digit="4">4</button>
+        <button type="button" class="btn" data-digit="5">5</button>
+        <button type="button" class="btn" data-digit="6">6</button>
+      </div>
+      <div class="row">
+        <button type="button" class="btn" data-digit="7">7</button>
+        <button type="button" class="btn" data-digit="8">8</button>
+        <button type="button" class="btn" data-digit="9">9</button>
+      </div>
+      <div class="row">
+        <button type="button" class="btn" data-digit="0">0</button>
+        <button type="button" class="btn op" id="btnPlus">+</button>
+        <button type="button" class="btn eq" id="btnEq">=</button>
+      </div>
+      <div class="row">
+        <button type="button" class="btn danger" id="btnClear">C</button>
+      </div>
+    </div>
+    <div class="step-hint" id="stepHint">{t.step1}</div>
+  </main>
+</Layout>
+
+<style>
+  .calculator-page {
+    font-family: 'SF Mono', 'Consolas', monospace;
+    background: #1a1a2e;
+    color: #eee;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 20px;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    box-sizing: border-box;
+  }
+
+  .calculator-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #a78bfa;
+  }
+
+  .panel {
+    background: #16213e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .display {
+    background: #0f0f1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    font-size: 1.35rem;
+    text-align: right;
+    letter-spacing: 1px;
+    min-height: 3rem;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+
+  .display :global(.sum-part) {
+    color: #22c55e;
+  }
+
+  .display.result {
+    color: #22c55e;
+  }
+
+  .row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    justify-content: center;
+  }
+
+  .row:last-child {
+    margin-bottom: 0;
+  }
+
+  .btn {
+    flex: 1;
+    min-width: 58px;
+    height: 56px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    cursor: pointer;
+    background: #2d2d44;
+    color: #eee;
+    transition: background 0.15s;
+  }
+
+  .btn:hover {
+    background: #3d3d5c;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn.op {
+    background: #374151;
+    color: #a78bfa;
+  }
+
+  .btn.op:hover {
+    background: #4b5563;
+  }
+
+  .btn.eq {
+    background: #6d28d9;
+    color: #fff;
+  }
+
+  .btn.eq:hover {
+    background: #7c3aed;
+  }
+
+  .btn.danger {
+    background: #991b1b;
+  }
+
+  .btn.danger:hover {
+    background: #b91c1c;
+  }
+
+  .step-hint {
+    margin-top: 1rem;
+    padding: 0.5rem 0.75rem;
+    max-width: 400px;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    line-height: 1.4;
+    background: #16213e;
+    border-radius: 8px;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+</style>
+
+<script define:vars={{ t }}>
+  (function () {
+    function getTarget() {
+      const d = new Date();
+      const M = d.getMonth() + 1;
+      const D = String(d.getDate()).padStart(2, '0');
+      const H = String(d.getHours()).padStart(2, '0');
+      const Min = String(d.getMinutes()).padStart(2, '0');
+      return parseInt('' + M + D + H + Min, 10);
+    }
+
+    let phase = 1;
+    let n1 = 0,
+      n2 = 0,
+      n3 = null;
+    let currentStr = '';
+    let n3Str = '';
+    let revealedDigits = 0;
+    let showingResult = false;
+    let resultExpr = '';
+
+    const displayEl = document.getElementById('display');
+    const stepHintEl = document.getElementById('stepHint');
+    const digitBtns = document.querySelectorAll('[data-digit]');
+
+    function setDigitButtonsQuestion(showQuestion) {
+      digitBtns.forEach((btn) => {
+        const digit = btn.getAttribute('data-digit');
+        btn.textContent = showQuestion ? '?' : digit ?? '';
+      });
+    }
+
+    function updateStepHint() {
+      if (!stepHintEl) return;
+      if (showingResult) {
+        stepHintEl.textContent = t.done;
+        return;
+      }
+      if (phase === 1) {
+        stepHintEl.textContent = t.step1;
+      } else if (phase === 2) {
+        stepHintEl.textContent = t.step2;
+      } else {
+        const n = n3Str.length;
+        stepHintEl.textContent = t.step3Prefix + n + t.step3Suffix;
+      }
+    }
+
+    function updateDisplay() {
+      if (!displayEl) return;
+      if (showingResult) {
+        displayEl.textContent = resultExpr;
+        displayEl.classList.add('result');
+        updateStepHint();
+        return;
+      }
+      displayEl.classList.remove('result');
+      let sumSoFar = 0;
+      let nextPlaceholder = '';
+      if (phase === 1) {
+        nextPlaceholder = currentStr + '?'.repeat(4 - currentStr.length);
+        displayEl.textContent = nextPlaceholder;
+      } else {
+        if (phase === 2) {
+          sumSoFar = n1;
+          nextPlaceholder = currentStr + '?'.repeat(5 - currentStr.length);
+        } else {
+          sumSoFar = n1 + n2;
+          const shown = n3Str.slice(0, revealedDigits);
+          const rest = n3Str.length - revealedDigits;
+          nextPlaceholder = shown + (rest > 0 ? '?'.repeat(rest) : '');
+        }
+        displayEl.innerHTML =
+          '<span class="sum-part">' + sumSoFar + '</span> + ' + nextPlaceholder;
+      }
+      updateStepHint();
+    }
+
+    function addDigit(digit) {
+      if (phase === 1) {
+        if (currentStr.length < 4) currentStr += String(digit);
+      } else if (phase === 2) {
+        if (currentStr.length < 5) currentStr += String(digit);
+      } else {
+        if (revealedDigits < n3Str.length) revealedDigits++;
+      }
+      showingResult = false;
+      updateDisplay();
+    }
+
+    function doPlus() {
+      showingResult = false;
+      if (phase === 1 && currentStr.length > 0) {
+        n1 = parseInt(currentStr, 10);
+        currentStr = '';
+        phase = 2;
+      } else if (phase === 2 && currentStr.length > 0) {
+        n2 = parseInt(currentStr, 10);
+        currentStr = '';
+        phase = 3;
+        const target = getTarget();
+        n3 = target - n1 - n2;
+        n3Str = String(n3);
+        revealedDigits = 0;
+        setDigitButtonsQuestion(true);
+      }
+      updateDisplay();
+    }
+
+    function doEquals() {
+      let sum = 0;
+      if (phase === 1) {
+        sum = currentStr.length > 0 ? parseInt(currentStr, 10) : 0;
+      } else if (phase === 2) {
+        sum = n1 + (currentStr.length > 0 ? parseInt(currentStr, 10) : 0);
+      } else {
+        sum = n1 + n2 + (n3 ?? 0);
+      }
+      resultExpr = String(sum);
+      showingResult = true;
+      setDigitButtonsQuestion(false);
+      updateDisplay();
+    }
+
+    function doClear() {
+      phase = 1;
+      n1 = 0;
+      n2 = 0;
+      n3 = null;
+      n3Str = '';
+      revealedDigits = 0;
+      currentStr = '';
+      showingResult = false;
+      setDigitButtonsQuestion(false);
+      updateDisplay();
+    }
+
+    digitBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (showingResult) {
+          doClear();
+          showingResult = false;
+        }
+        const digit = parseInt(btn.getAttribute('data-digit') ?? '0', 10);
+        addDigit(digit);
+      });
+    });
+
+    document.getElementById('btnPlus')?.addEventListener('click', () => {
+      if (showingResult) showingResult = false;
+      doPlus();
+    });
+    document.getElementById('btnEq')?.addEventListener('click', doEquals);
+    document.getElementById('btnClear')?.addEventListener('click', () => {
+      showingResult = false;
+      doClear();
+    });
+  })();
+</script>
