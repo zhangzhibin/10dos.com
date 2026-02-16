@@ -15,8 +15,8 @@ export interface MagicCalculatorT {
 
 export const magicCalculatorI18n: Record<MagicCalculatorLang, MagicCalculatorT> = {
   en: {
-    title: 'Magic Calculator',
-    description: 'A small magic calculator based on the current time. Enter numbers step by step to get a surprising result.',
+    title: '2026 CCTV Spring Festival Gala Calculator Magic Reveal',
+    description: '2026 Year of the Horse CCTV Spring Festival Gala: calculator magic reveal and simulation. Try the trick yourself.',
     step1: 'Step 1: Enter a 4-digit number, then press +.',
     step2: 'Step 2: Enter a 5-digit number, then press +.',
     step3Prefix: 'Step 3: Enter a ',
@@ -24,8 +24,8 @@ export const magicCalculatorI18n: Record<MagicCalculatorLang, MagicCalculatorT> 
     done: 'Done. Press C to clear and start over.',
   },
   zh: {
-    title: '魔术计算器',
-    description: '基于当前时间的小魔术计算器，按步骤输入数字即可得到神奇结果。',
+    title: '2026马年央视春晚计算器魔术揭秘',
+    description: '2026年马年中央电视台春晚，神奇计算器魔术揭秘和模拟。在线体验春晚同款计算器魔术。',
     step1: '第一步，输入一个4位数。输入完毕后，按 + 。',
     step2: '第二步，输入一个5位数。输入完毕后，按+。',
     step3Prefix: '第三步，随机输入一个',
@@ -33,8 +33,8 @@ export const magicCalculatorI18n: Record<MagicCalculatorLang, MagicCalculatorT> 
     done: '计算完成。按 C 清空重新开始。',
   },
   zhtw: {
-    title: '魔術計算器',
-    description: '基於當前時間的小魔術計算器，按步驟輸入數字即可得到神奇結果。',
+    title: '2026馬年央視春晚計算器魔術揭秘',
+    description: '2026年馬年中央電視台春晚，神奇計算器魔術揭秘和模擬。在線體驗春晚同款計算器魔術。',
     step1: '第一步，輸入一個4位數。輸入完畢後，按 + 。',
     step2: '第二步，輸入一個5位數。輸入完畢後，按+。',
     step3Prefix: '第三步，隨機輸入一個',
@@ -42,8 +42,8 @@ export const magicCalculatorI18n: Record<MagicCalculatorLang, MagicCalculatorT> 
     done: '計算完成。按 C 清空重新開始。',
   },
   ja: {
-    title: 'マジック計算機',
-    description: '現在時刻に基づく小さなマジック計算機。手順に従って数字を入力すると驚きの結果が出ます。',
+    title: '2026年CCTV春節聯歓会 計算機マジック種明かし',
+    description: '2026年午年CCTV春節聯歓会の計算機マジックの種明かしとシミュレーション。',
     step1: 'ステップ1：4桁の数字を入力し、+ を押してください。',
     step2: 'ステップ2：5桁の数字を入力し、+ を押してください。',
     step3Prefix: 'ステップ3：',
