@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getEntry, render } from 'astro:content';
 import { magicCalculatorI18n } from '../../data/magic-calculator-i18n';
 
 export async function getStaticPaths() {
@@ -14,6 +15,8 @@ const { contentLang } = Astro.props;
 const t = magicCalculatorI18n[contentLang];
 const pathPrefix = contentLang === 'ja' ? '/ja' : contentLang === 'zh' ? '/zh' : '/zh-tw';
 const canonicalPath = `${pathPrefix}/magic-calculator/`;
+const revealEntry = await getEntry(contentLang, 'magic-calculator-reveal');
+const RevealBody = revealEntry ? (await render(revealEntry)).Content : null;
 ---
 
 <Layout
@@ -23,7 +26,7 @@ const canonicalPath = `${pathPrefix}/magic-calculator/`;
   lang={contentLang}
 >
   <main class="calculator-page">
-    <h1 class="calculator-title">{t.title}</h1>
+    <h1 class="calculator-title">{t.bodyTitle}</h1>
     <div class="panel">
       <div class="display" id="display">????</div>
       <div class="row">
@@ -51,6 +54,17 @@ const canonicalPath = `${pathPrefix}/magic-calculator/`;
       </div>
     </div>
     <div class="step-hint" id="stepHint">{t.step1}</div>
+
+    {RevealBody && (
+      <section class="reveal-section">
+        <details class="reveal-details">
+          <summary class="reveal-summary">{t.revealTitle}</summary>
+          <div class="reveal-body">
+            <RevealBody />
+          </div>
+        </details>
+      </section>
+    )}
   </main>
 </Layout>
 
@@ -177,6 +191,56 @@ const canonicalPath = `${pathPrefix}/magic-calculator/`;
     border-radius: 8px;
     white-space: nowrap;
     overflow-x: auto;
+  }
+
+  .reveal-section {
+    margin-top: 1.5rem;
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .reveal-details {
+    background: #16213e;
+    border-radius: 8px;
+    border: 1px solid #333;
+  }
+
+  .reveal-summary {
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+    color: #a78bfa;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .reveal-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .reveal-summary:hover {
+    color: #c4b5fd;
+  }
+
+  .reveal-body {
+    padding: 0 1rem 1rem;
+    font-size: 0.8125rem;
+    color: #d1d5db;
+    line-height: 1.6;
+  }
+
+  .reveal-body :global(h2) {
+    font-size: 0.9375rem;
+    margin: 0 0 0.5rem 0;
+    color: #e5e7eb;
+  }
+
+  .reveal-body :global(p) {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .reveal-body :global(strong) {
+    color: #a78bfa;
   }
 </style>
 
